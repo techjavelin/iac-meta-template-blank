@@ -1,5 +1,5 @@
 ---
-name: continuous // validation
+name: validation
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   terraform-validate:
-    name: continuous // validation // terraform
+    name: validation // terraform
     runs-on: ubuntu-latest
 
     steps:
@@ -23,7 +23,7 @@ jobs:
           terraform-dir: terraform
 
   terraform-lint:
-    name: continuous // validation // terraform-lint
+    name: validation // terraform-lint
     runs-on: ubuntu-latest
 
     steps:
@@ -35,8 +35,8 @@ jobs:
         with:
           terraform-dir: terraform
 
-  anisble-validate:
-    name: continuous // validation // ansible
+  ansible-validate:
+    name: validation // ansible
     runs-on: ubuntu-latest
 
     steps:

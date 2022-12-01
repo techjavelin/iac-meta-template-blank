@@ -1,0 +1,7 @@
+[submodule "ansible/inventory/terraform-bindrole-inventory"]
+	path = ansible/inventory/terraform-bindrole-inventory
+	url = https://github.com/techjavelin/iac-meta-ansible-bindrole-inventory.git
+[submodule "ansible/inventory/terraform-inventory"]
+	path = ansible/inventory/terraform-inventory
+	url = https://github.com/techjavelin/terraform-inventory.git
+	branch = production
