@@ -47,3 +47,4 @@ jobs:
         uses: techjavelin/ansible-lint-action@upgraded-ansible-lint
         with:
           path: ansible/
+        continue-on-error: true
