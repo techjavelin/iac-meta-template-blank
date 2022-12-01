@@ -92,3 +92,62 @@ jobs:
                 body: output
               })
             }
+
+  ansible_diff:
+    name: pr // ansible
+    runs-on: ubuntu-latest
+
+    env:
+      ANSIBLE_TF_DIR: terraform
+      # If you use Terraform Cloud or Workspaces, uncomment this to set the workspace name for
+      # the dynamic inventory scripts
+      # ANSIBLE_TF_WS_NAME:
+
+      # If you've installed modules and need to run ansible-galaxy prior to running ansible,
+      # change this to true
+      INIT_REQUIREMENTS: false
+
+      # If you're using an ansible vault, set USE_VAULT to true and make sure you have a
+      # secret named ANSIBLE_VAULT_PASSWORD
+      USE_VAULT: false
+
+    steps:
+      - name: pr // ansible // checkout
+        uses: actions/checkout@v3
+
+      - name: pr // ansible // setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: pr // ansible // init
+        run: pip install -r init-requirements.txt
+
+      - name: pr // ansible // pipenv
+        run: pipenv install
+
+      - name: pr // ansible // terraform-setup
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+
+      - name: pr // ansible // terraform-init
+        id: terraform-init
+        run: terraform init
+        working-directory: terraform
+
+      - name: pr // ansible // install-requirements
+        if: ${{ env.INIT_REQUIREMENTS == true }}
+        run: |
+          pipenv run ansible-galaxy install -r ansible/requirements.yml
+
+      - name: pr // ansible // setup-vault
+        if: ${{ env.USE_VAULT == true }}
+        run: |
+          echo ${{ env.ANSIBLE_VAULT_PASSWORD }} > /tmp/.ansible_vault_password
+          echo "--vault-password-file /tmp/" >> $GITHUB_OUTPUT
+
+      - name: pr // ansible // dry-run
+        run: |
+          export ANSIBLE_TF_BIN=$(which terraform)
+          pipenv run ansible-playbook --inventory ansible/inventory/terraform-inventory\terraform.py --inventory ansible/inventory/static --check --diff ${{ env.ANSIBLE_EXTRA_ARGS }} ansible/main.yml
