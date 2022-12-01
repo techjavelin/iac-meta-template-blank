@@ -1,0 +1,27 @@
+---
+# .ansible-lint.yml
+
+profile: safety
+
+exclude_paths:
+  - .github/
+  - ansible/inventory/terraform-inventory/
+  - ansible/inventory/terraform-bindrole-inventory/
+
+use_default_rules: true
+
+enable_list:
+  - empty-string-compare # opt-in
+  - no-log-password # opt-in
+  - no-same-owner # opt-in
+
+progressive: true
+
+kinds:
+  - vars: "inventory/group_vars/**/*.yml"
+  - vars: "inventory/host_vars/**/*.yml"
+  - vars: "**/vars/*.yml"
+  - playbook: "standalone-plays/**/*.yml"
+  - playbook: "*.yml"
+  - tasks: "**/tasks/*.yml"
+  - meta: "**/meta/main.yml"

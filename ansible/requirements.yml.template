@@ -1,0 +1,9 @@
+# List any third-party roles and collections your playbooks required here
+# Referece: https://docs.ansible.com/ansible/latest/galaxy/user_guide.html#installing-roles-and-collections-from-the-same-requirements-yml-file
+roles:
+
+collections:
+
+# Larger projects may want to have multiple files
+# Reference: https://docs.ansible.com/ansible/latest/galaxy/user_guide.html#installing-multiple-roles-from-multiple-files
+# - include: <path_to_requirements>.yml

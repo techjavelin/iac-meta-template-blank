@@ -1,0 +1,49 @@
+---
+name: continuous // validation
+
+on:
+  push:
+    branches:
+      - main
+
+  pull_request:
+
+jobs:
+  terraform-validate:
+    name: continuous // validation // terraform
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: terraform-validate // checkout
+        uses: actions/checkout@v3
+
+      - name: terraform-validate // validate
+        uses: techjavelin/iac-action-terraform-validate@v1
+        with:
+          terraform-dir: terraform
+
+  terraform-lint:
+    name: continuous // validation // terraform-lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: terraform-validate // checkout
+        uses: actions/checkout@v3
+
+      - name: terraform-validate // lint
+        uses: techjavelin/iac-action-terraform-lint@v1-dev
+        with:
+          terraform-dir: terraform
+
+  anisble-validate:
+    name: continuous // validation // ansible
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ansible-validate // checkout
+        uses: actions/checkout@v3
+
+      - name: ansible-validate // lint
+        uses: ansible-community/ansible-lint-action@v6
+        with:
+          path: ansible/
