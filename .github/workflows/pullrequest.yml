@@ -120,11 +120,11 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: pr // ansible // init
-        run: pip install -r init-requirements.txt
+      # - name: pr // ansible // init
+      #   run: pip install -r init-requirements.txt
 
-      - name: pr // ansible // pipenv
-        run: pipenv install
+      # - name: pr // ansible // pipenv
+      #   run: pipenv install
 
       - name: pr // ansible // terraform-setup
         uses: hashicorp/setup-terraform@v2
@@ -136,18 +136,15 @@ jobs:
         run: terraform init
         working-directory: terraform
 
-      - name: pr // ansible // install-requirements
-        if: ${{ env.INIT_REQUIREMENTS == true }}
-        run: |
-          pipenv run ansible-galaxy install -r ansible/requirements.yml
-
-      - name: pr // ansible // setup-vault
-        if: ${{ env.USE_VAULT == true }}
-        run: |
-          echo ${{ env.ANSIBLE_VAULT_PASSWORD }} > /tmp/.ansible_vault_password
-          echo "--vault-password-file /tmp/" >> $GITHUB_OUTPUT
-
-      - name: pr // ansible // dry-run
-        run: |
-          export ANSIBLE_TF_BIN=$(which terraform)
-          pipenv run ansible-playbook --inventory ansible/inventory/terraform-inventory\terraform.py --inventory ansible/inventory/static --check --diff ${{ env.ANSIBLE_EXTRA_ARGS }} ansible/main.yml
+      - name: pr // ansible // dryrun
+        id: ansible-dryrun
+        uses: techjavelin/iac-action-ansible@v1
+        with:
+          playbook: ansible/main.yml
+          options: |
+            --inventory ansible/inventory/terraform-inventory/teraform.py
+            --inventory ansible/inventory/static
+          check_mode: "true"
+          diff: "true"
+          use_pipenv: "true"
+          no_color: "true"
