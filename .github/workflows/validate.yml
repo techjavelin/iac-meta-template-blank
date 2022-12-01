@@ -44,6 +44,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: ansible-validate // lint
-        uses: ansible-community/ansible-lint-action@v6
+        uses: techjavelin/ansible-lint-action@upgraded-ansible-lint
         with:
           path: ansible/
