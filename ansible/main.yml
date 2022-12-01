@@ -1,9 +1,9 @@
 ---
-- name: ${ projectname }
+- name: "{{ projectname }}"
   hosts: localhost
 
   tasks:
     - name: Hello Project
       ansible.builtin.command:
-        cmd: "echo Hellow ${ projectname }"
+        cmd: "echo Hellow {{ projectname }}"
       changed_when: true
